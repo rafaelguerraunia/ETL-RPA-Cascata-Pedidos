@@ -51,9 +51,12 @@ Public Sub ExecutarCascata()
         Exit Sub
     End If
 
+    ' Filtros do Pedido: plantas (WERKS) + janela de data (ERDAT).
+    ' NOTA: não filtramos por "LOEKZ" - VBAP não possui esse campo. Em SD, item
+    ' de pedido rejeitado/cancelado é identificado por ABGRU (motivo de recusa),
+    ' que vem como coluna na aba PEDIDO para filtragem posterior, se desejado.
     Dim filtrosPedido As New Collection
     filtrosPedido.Add NovoFiltroIncluirMultiplo("WERKS", mPlantas)
-    filtrosPedido.Add NovoFiltroExcluirFlag("LOEKZ", "X")
     filtrosPedido.Add NovoFiltroIntervaloData("ERDAT", modUtils.DataSAP(Date - mJanelaDias), modUtils.DataSAP(Date))
 
     Dim resPedido As clsRunResult
