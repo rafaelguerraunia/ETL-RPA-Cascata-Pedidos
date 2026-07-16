@@ -166,14 +166,18 @@ Public Sub ExecutarCascata()
     Exit Sub
 
 ErroFatal:
-    Dim msgErro As String
+    Dim msgErro As String, numErro As Long, ultimaOp As String
+    numErro = Err.Number
     msgErro = Err.Description
-    modLog.LogErro "Erro inesperado interrompeu a cascata: " & msgErro & _
+    ultimaOp = modSAPConnection.UltimaOperacaoSAP
+    modLog.LogErro "Erro inesperado interrompeu a cascata: Err " & numErro & " - " & msgErro & _
+        " | Última operação SAP tentada: [" & ultimaOp & "]" & _
         " - tentando ainda assim reconstruir as abas finais com o que já foi acumulado."
     On Error Resume Next
     modJoinBuilder.ConstruirSaidasFinais mSpecs, mSettings
     On Error GoTo 0
-    modLog.Falhar "ETL Cascata interrompida por erro inesperado: " & msgErro & vbCrLf & _
+    modLog.Falhar "ETL Cascata interrompida por erro inesperado: Err " & numErro & " - " & msgErro & vbCrLf & _
+        "Última operação SAP: " & ultimaOp & vbCrLf & _
         "Pedidos processados antes da interrupção: " & mPedidosProcessados & vbCrLf & "Verifique a aba Log."
 End Sub
 

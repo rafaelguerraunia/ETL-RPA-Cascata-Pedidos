@@ -11,6 +11,11 @@ Public SapApp As Object
 Public SapConnection As Object
 Public Session As Object
 
+' Última operação SAP tentada (para diagnóstico): os wrappers abaixo atualizam
+' isto ANTES de tocar o elemento, então, se algo estourar, o tratador de erro
+' consegue logar exatamente qual chamada/elemento falhou.
+Public UltimaOperacaoSAP As String
+
 Public Function ConectarSAP() As Boolean
     On Error Resume Next
     Set SapGuiAuto = Nothing
@@ -64,6 +69,7 @@ Public Function ElementExists(ByVal idElemento As String) As Boolean
 End Function
 
 Public Sub NavegarTransacao(ByVal codigoTransacao As String)
+    UltimaOperacaoSAP = "NavegarTransacao " & codigoTransacao
     Session.findById("wnd[0]/tbar[0]/okcd").Text = codigoTransacao
     Session.findById("wnd[0]").sendVKey 0
     AguardarSAP
@@ -85,13 +91,16 @@ End Function
 
 ' Wrappers curtos (deixam modSQVIEngine mais legível).
 Public Sub Definir(ByVal idElemento As String, ByVal valor As String)
+    UltimaOperacaoSAP = "Definir " & idElemento & " = '" & valor & "'"
     Session.findById(idElemento).Text = valor
 End Sub
 
 Public Sub Pressionar(ByVal idElemento As String)
+    UltimaOperacaoSAP = "Pressionar (.press) " & idElemento
     Session.findById(idElemento).press
 End Sub
 
 Public Sub Selecionar(ByVal idElemento As String)
+    UltimaOperacaoSAP = "Selecionar (.Select) " & idElemento
     Session.findById(idElemento).Select
 End Sub

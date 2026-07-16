@@ -240,7 +240,11 @@ Public Function RunSQVI(ByVal spec As clsSQVISpec, ByVal filtros As Collection, 
 End Function
 
 Private Sub ExportarPlanilhaAtual(ByVal nomeArquivo As String, ByVal caminhoDownload As String)
-    modSAPConnection.Pressionar "wnd[0]/mbar/menu[0]/menu[3]/menu[0]"   ' Lista > Exportar > Planilha
+    ' Menu "Lista > Exportar > Planilha": itens de menu (GuiMenu) usam .Select,
+    ' NUNCA .press - chamar .press aqui gera "Object doesn't support this
+    ' property or method" (erro 438). Por isso usamos Selecionar (.Select) no
+    ' menu e Pressionar (.press) só nos botões da janela seguinte.
+    modSAPConnection.Selecionar "wnd[0]/mbar/menu[0]/menu[3]/menu[0]"   ' Lista > Exportar > Planilha
     modSAPConnection.Definir "wnd[1]/usr/ssubSUB_CONFIGURATION:SAPLSALV_GUI_CUL_EXPORT_AS:0512/txtGS_EXPORT-FILE_NAME", nomeArquivo
     modSAPConnection.Pressionar "wnd[1]/tbar[0]/btn[20]"
     modSAPConnection.Definir "wnd[1]/usr/ctxtDY_PATH", caminhoDownload
