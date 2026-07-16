@@ -199,6 +199,7 @@ if __name__ == "__main__":
     std_order = [
         "modConstantes", "modLog", "modUtils", "modSAPConnection", "modConfig",
         "modSQVIEngine", "modExcelWrite", "modCascade", "modJoinBuilder", "modMain",
+        "modDebug",
     ]
     class_order = ["clsSQVISpec", "clsFiltro", "clsRunResult", "clsLinhaResolvida"]
 
