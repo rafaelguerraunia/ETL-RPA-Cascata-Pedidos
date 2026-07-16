@@ -29,7 +29,9 @@ Public Function LoadSQVISpecs() As Object   ' Dictionary(SQVIName -> clsSQVISpec
             Set spec.CamposObrigatoriosFELD = modUtils.SplitTrim(CStr(ws.Cells(i, 6).Value))
             spec.AbaDestino = Trim$(ws.Cells(i, 7).Value)
             Set spec.ChaveUpsert = modUtils.SplitTrim(CStr(ws.Cells(i, 8).Value))
-            spec.PodeCriarAutomaticamente = CBool(ws.Cells(i, 9).Value)
+            Dim textoPodeCriar As String
+            textoPodeCriar = UCase$(Trim$(CStr(ws.Cells(i, 9).Value)))
+            spec.PodeCriarAutomaticamente = (textoPodeCriar = "VERDADEIRO" Or textoPodeCriar = "TRUE" Or textoPodeCriar = "1")
 
             resultado.Add spec.SQVIName, spec
         End If
