@@ -18,9 +18,15 @@ Public Function LoadSQVISpecs() As Object   ' Dictionary(SQVIName -> clsSQVISpec
     ultimaLinha = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
 
     Dim i As Long
+    Dim spec As clsSQVISpec
     For i = 2 To ultimaLinha
         If Len(Trim$(ws.Cells(i, 1).Value)) > 0 Then
-            Dim spec As New clsSQVISpec
+            ' IMPORTANTE: criar uma instância NOVA a cada linha. Usar
+            ' "Dim spec As New clsSQVISpec" aqui seria um bug clássico do VBA:
+            ' o "As New" instancia o objeto UMA única vez por chamada da função,
+            ' então todas as linhas acabariam apontando para o MESMO objeto (o da
+            ' última linha lida), fazendo specs("-RGVS-VBAP") devolver o VBRK.
+            Set spec = New clsSQVISpec
             spec.SQVIName = Trim$(ws.Cells(i, 1).Value)
             spec.Titulo = Trim$(ws.Cells(i, 2).Value)
             spec.Tabela = Trim$(ws.Cells(i, 3).Value)
